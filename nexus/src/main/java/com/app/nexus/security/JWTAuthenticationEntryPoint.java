@@ -15,8 +15,8 @@ import java.io.IOException;
  * Used for whenever an exception is thrown due to an unauthorized user trying to access a resource that requires authentication
  */
 
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
+public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    private static final Logger logger = LoggerFactory.getLogger(JWTAuthenticationEntryPoint.class);
     @Override
     public void commence(HttpServletRequest httpServletRequest,
                          HttpServletResponse httpServletResponse,
