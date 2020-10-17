@@ -83,5 +83,125 @@ public class ApplicationUser extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     private Set<Project> projects;
 
+    public ApplicationUser(){}
 
+    public ApplicationUser(Long id, @NotBlank @Size(max = 20) String first, @NotBlank @Size(max = 20) String last, @NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank boolean email_confirmed, @NotBlank @Size(max = 20) String phoneNumber, @NotBlank boolean phone_confirmed, @NotBlank boolean two_factor_enabled, @NotBlank String password_hash, Organization organization, Set<Role> roles, Set<Project> projects) {
+        this.id = id;
+        this.first = first;
+        this.last = last;
+        this.username = username;
+        this.email = email;
+        this.email_confirmed = email_confirmed;
+        this.phoneNumber = phoneNumber;
+        this.phone_confirmed = phone_confirmed;
+        this.two_factor_enabled = two_factor_enabled;
+        this.password_hash = password_hash;
+        this.organization = organization;
+        this.roles = roles;
+        this.projects = projects;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirst() {
+        return first;
+    }
+
+    public void setFirst(String first) {
+        this.first = first;
+    }
+
+    public String getLast() {
+        return last;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isEmail_confirmed() {
+        return email_confirmed;
+    }
+
+    public void setEmail_confirmed(boolean email_confirmed) {
+        this.email_confirmed = email_confirmed;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public boolean isPhone_confirmed() {
+        return phone_confirmed;
+    }
+
+    public void setPhone_confirmed(boolean phone_confirmed) {
+        this.phone_confirmed = phone_confirmed;
+    }
+
+    public boolean isTwo_factor_enabled() {
+        return two_factor_enabled;
+    }
+
+    public void setTwo_factor_enabled(boolean two_factor_enabled) {
+        this.two_factor_enabled = two_factor_enabled;
+    }
+
+    public String getPassword_hash() {
+        return password_hash;
+    }
+
+    public void setPassword_hash(String password_hash) {
+        this.password_hash = password_hash;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
+    }
 }
