@@ -1,5 +1,8 @@
 package com.app.nexus.config;
 
+import com.app.nexus.security.CustomUserDetailsService;
+import com.app.nexus.security.JWTAuthenticationEntryPoint;
+import com.app.nexus.security.JWTAuthenticationFilter;
 import com.app.nexus.security.JwtAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,21 +20,24 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /**
  * @Author Amadeus
+ *
  */
 
 @Configuration
+// enable web security
 @EnableWebSecurity
+// enable global method security for method level security
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
+    private JWTAuthenticationEntryPoint unauthorizedHandler;
 
     @Bean
-    public jwtAuthenticationFilter jwtAuthenticationFilter(){
-        return new jwtAuthenticationFilter();
+    public JWTAuthenticationFilter jwtAuthenticationFilter(){
+        return new JWTAuthenticationFilter();
     }
 
     @Override
