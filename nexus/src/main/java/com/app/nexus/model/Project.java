@@ -1,5 +1,6 @@
 package com.app.nexus.model;
 
+import com.app.nexus.audit.DateAudit;
 import lombok.Data;
 
 import javax.persistence.*;
