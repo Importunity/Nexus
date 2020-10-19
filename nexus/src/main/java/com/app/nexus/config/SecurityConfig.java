@@ -1,13 +1,14 @@
 package com.app.nexus.config;
 
-import com.app.nexus.security.CustomUserDetailsService;
+import com.app.nexus.service.CustomUserDetailsService;
 import com.app.nexus.security.JWTAuthenticationEntryPoint;
 import com.app.nexus.security.JWTAuthenticationFilter;
-import com.app.nexus.security.JwtAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,6 +47,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
+
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){
