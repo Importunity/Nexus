@@ -1,4 +1,4 @@
-package com.app.nexus.security;
+package com.app.nexus.service;
 
 import com.app.nexus.model.ApplicationUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
