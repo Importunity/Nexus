@@ -1,5 +1,6 @@
 package com.app.nexus.model;
 
+import com.app.nexus.audit.DateAudit;
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
 
@@ -22,13 +23,14 @@ public class ApplicationUser extends DateAudit {
     @Column(name = "id")
     private Long id;
 
+    // first name can be up to 50 characters long according to MN law
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 50)
     @Column(name= "first")
     private String first;
 
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 50)
     @Column(name="last")
     private String last;
 
@@ -44,7 +46,7 @@ public class ApplicationUser extends DateAudit {
     @Column(name="email")
     private String email;
 
-    @NotBlank
+    //@NotBlank
     @Column(name="email_confirmed")
     private boolean email_confirmed; // 0 - false, 1 - true
 
@@ -53,11 +55,11 @@ public class ApplicationUser extends DateAudit {
     @Column(name="phone_number")
     private String phoneNumber;
 
-    @NotBlank
+    //@NotBlank
     @Column(name="phone_confirmed")
     private boolean phone_confirmed;
 
-    @NotBlank
+    //@NotBlank
     @Column(name="two_factor_enabled")
     private boolean two_factor_enabled;
 
@@ -85,20 +87,13 @@ public class ApplicationUser extends DateAudit {
 
     public ApplicationUser(){}
 
-    public ApplicationUser(Long id, @NotBlank @Size(max = 20) String first, @NotBlank @Size(max = 20) String last, @NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank boolean email_confirmed, @NotBlank @Size(max = 20) String phoneNumber, @NotBlank boolean phone_confirmed, @NotBlank boolean two_factor_enabled, @NotBlank String password_hash, Organization organization, Set<Role> roles, Set<Project> projects) {
-        this.id = id;
+    public ApplicationUser(@NotBlank @Size(max = 50) String first, @NotBlank @Size(max = 50) String last, @NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 20) String phoneNumber, @NotBlank String password_hash) {
         this.first = first;
         this.last = last;
         this.username = username;
         this.email = email;
-        this.email_confirmed = email_confirmed;
         this.phoneNumber = phoneNumber;
-        this.phone_confirmed = phone_confirmed;
-        this.two_factor_enabled = two_factor_enabled;
         this.password_hash = password_hash;
-        this.organization = organization;
-        this.roles = roles;
-        this.projects = projects;
     }
 
     public Long getId() {
