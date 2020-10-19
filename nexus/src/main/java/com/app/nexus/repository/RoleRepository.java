@@ -1,5 +1,9 @@
 package com.app.nexus.repository;
 
+/**
+ * @Author Amadeus
+ */
+
 import com.app.nexus.model.Role;
 import com.app.nexus.model.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
