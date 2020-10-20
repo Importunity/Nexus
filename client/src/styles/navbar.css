@@ -1,0 +1,8 @@
+.menu-item{
+    text-decoration: none;
+    color: white;
+}
+
+.menu-item:hover{
+    text-decoration: none;
+}
