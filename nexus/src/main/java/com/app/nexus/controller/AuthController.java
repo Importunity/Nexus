@@ -49,7 +49,7 @@ public class AuthController {
     @Autowired
     JWTProvider jwtProvider;
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticateApplicationUser(@Valid @RequestBody LoginRequest loginRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
