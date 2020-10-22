@@ -67,10 +67,6 @@ public class ApplicationUser extends DateAudit {
     @Column(name="password_hash")
     private String password_hash;
 
-    // many can application users are associated with one organization
-    @JoinColumn(name="organization_id")
-    @ManyToOne
-    private Organization organization;
 
     // user can have many roles
     @ManyToMany(fetch = FetchType.LAZY)
@@ -79,11 +75,17 @@ public class ApplicationUser extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_projects",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     private Set<Project> projects;
+
+    // users can have many tasks
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Task> tasks;
 
     public ApplicationUser(){}
 
@@ -176,14 +178,6 @@ public class ApplicationUser extends DateAudit {
         this.password_hash = password_hash;
     }
 
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
@@ -199,4 +193,14 @@ public class ApplicationUser extends DateAudit {
     public void setProjects(Set<Project> projects) {
         this.projects = projects;
     }
+
+    public void addTask(Task task){
+        tasks.add(task);
+        task.setUser(this);
+    }
+    public void removeTask(Task task){
+        tasks.remove(task);
+        task.setUser(null);
+    }
+
 }
