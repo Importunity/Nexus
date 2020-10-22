@@ -38,6 +38,19 @@ public class Task extends ApplicationUserDateAudit {
     @JoinColumn(name = "project_id")
     private Project project;
 
+    // a task can only be associated with one user
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private ApplicationUser user;
+
+    public ApplicationUser getUser() {
+        return user;
+    }
+
+    public void setUser(ApplicationUser user) {
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }
@@ -77,4 +90,6 @@ public class Task extends ApplicationUserDateAudit {
     public void setProject(Project project) {
         this.project = project;
     }
+
+
 }
