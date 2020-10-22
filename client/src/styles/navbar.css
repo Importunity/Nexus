@@ -1,8 +1,29 @@
 .menu-item{
     text-decoration: none;
-    color: white;
+    color: white !important;
 }
 
 .menu-item:hover{
     text-decoration: none;
+    color: black !important;
+}
+
+.menu-item:hover{
+    text-decoration: none;
+}
+
+#about-title{
+    text-align: center;
+    color: white;
+    margin-top: 20vh;
+}
+
+#about-content{
+    font-size: large;
+    color: #16d8df !important;
+}
+
+#title{
+    text-decoration: none;
+    color: white;
 }
