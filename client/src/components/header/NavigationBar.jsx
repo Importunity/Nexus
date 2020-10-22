@@ -1,30 +1,49 @@
 import {
   AppBar,
   Button,
-  Grid,
-  Toolbar
+  Toolbar,
+  Typography
 } from "@material-ui/core";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import React, {useEffect, useState } from "react";
 import "../../styles/navbar.css";
 import Login from "../login/Login";
 import { getCurrentUser } from "../../api/UserAPI";
 import { TOKEN } from "../../constants/types";
+import Projects from "../projects/Projects";
 
 function Home() {
-  return <div>HELLO</div>;
+  return (
+    <div className="container">
+      <h1 id="about-title">About</h1>
+      <div className="container">
+          <p id="about-content">Nexus is a project manager application created in spring boot as the backend framework and react as the frontend framework.  </p>
+      </div>
+    </div>
+  );
 }
 
-function Logout(){
-    return <Button>Logout</Button>
+
+function PrivateRoute ({component: Component, isAuthenticated, ...rest}){
+  return (
+    <Route {...rest}
+      render={(props) => isAuthenticated
+      ?<Component {...props} />
+      : <Redirect to={{pathname: '/', state:{from: props.location}}} />
+    }
+    />
+  )
 }
+
+
 
 
 function NavigationBar() {
+
     const[logged, setLogged] = useState({currentUser: null, isAuthenticated: false, isLoading: false});
     const logoutUser = () => {
         localStorage.removeItem(TOKEN);
-        setLogged({currentUser: null, isAuthenticated: false});
+        setLogged({currentUser: null, isAuthenticated: false, isLoading: false});
     }
     const loadUser = () => {
         setLogged({isLoading: true});
@@ -43,37 +62,43 @@ function NavigationBar() {
     }, [])
 
 
+    
+
+
   return (
-    <div className="initial-container">
+    <div className="initial-container" style={{flexGrow: 1}}>
       <Router>
         <AppBar style={{ background: '#2E3B55' }} position="static">
           <Toolbar>
-            <Grid
-              justify="space-between" 
-              container
-            >
-            <Grid item>
-                <Link to={'/'} className="menu-item">NEXUS</Link>
-            </Grid>
-
-            <Grid item>
+              <Typography style={{flexGrow: 1}}>
+                <Link to={'/'} id="title">NEXUS</Link>
+              </Typography>
                 <div>
-                    <Button>
-                        <Link to={'/login'} className="menu-item">Login</Link>
-                    </Button>
-                    {logged.isAuthenticated ? (
-                        <div onClick={logoutUser}>
-                            <Logout />
-                        </div>
-                    ): null }
+                  {logged.isAuthenticated? (
+                    <div>
+                      <Button >
+                        <Link to={'/projects'} className="menu-item">Projects</Link>
+                      </Button>
+                      <Button >
+                        <Link to={'/account'} className="menu-item">Projects</Link>
+                      </Button>
+                      <Button className="menu-item" onClick={logoutUser}>Logout</Button>
+                    </div>
+                  ) : null}
+                    {!logged.isAuthenticated ? (
+                      <div>
+                      <Button>
+                          <Link to={'/login'} className="menu-item">Login / Register</Link>
+                      </Button>
+                    </div>
+                    ) : null }
                 </div>
-            </Grid>
-            </Grid>
           </Toolbar>
         </AppBar>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/login" component={Login} />
+          <Route path="/login" component={() => <Login onLoad={loadUser} />} />
+          <PrivateRoute isAuthenticated={logged.isAuthenticated} path="/projects" component={Projects}></PrivateRoute>
         </Switch>
       </Router>
     </div>
