@@ -14,6 +14,8 @@ import javax.transaction.Transactional;
 /**
  * @Author Amadeus
  * used to load a users data given the username
+ * since organization is a user with different attributes we'll be using this class for
+ * application user and organization user
  */
 
 @Service
@@ -21,6 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     ApplicationUserRepository applicationUserRepository;
+
 
 
     @Override
@@ -41,4 +44,5 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return UserPrincipal.create(applicationUser);
     }
+
 }

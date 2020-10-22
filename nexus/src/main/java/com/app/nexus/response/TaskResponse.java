@@ -1,11 +1,13 @@
 package com.app.nexus.response;
 
 import com.app.nexus.information.UserSummary;
+import com.app.nexus.model.ApplicationUser;
 
 import java.time.Instant;
 
 /**
  * @Author Amadeus
+ * Task response is a class that is used to show to the user what is shown in the json
  */
 
 public class TaskResponse {
