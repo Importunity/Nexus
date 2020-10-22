@@ -3,7 +3,7 @@ import { TOKEN } from '../constants/types';
 export const request = (options) => {
     // headers content type
     const headers = new Headers({
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
     });
     // retrieve the token from local storage
     if(localStorage.getItem(TOKEN)){
