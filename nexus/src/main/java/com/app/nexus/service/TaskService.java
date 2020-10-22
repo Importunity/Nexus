@@ -5,16 +5,24 @@ import com.app.nexus.information.UserPrincipal;
 import com.app.nexus.model.ApplicationUser;
 import com.app.nexus.model.Task;
 import com.app.nexus.repository.ApplicationUserRepository;
+import com.app.nexus.repository.ProjectRepository;
 import com.app.nexus.repository.TaskRepository;
 import com.app.nexus.request.TaskRequest;
 import com.app.nexus.response.TaskResponse;
+import com.app.nexus.security.CurrentUser;
 import com.app.nexus.util.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @Author Amadeus
@@ -29,13 +37,18 @@ public class TaskService {
     @Autowired
     private ApplicationUserRepository applicationUserRepository;
 
+    @Autowired
+    private ProjectRepository projectRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
-    public Task createTask(TaskRequest taskRequest){
+    public Task createTask(TaskRequest taskRequest, UserPrincipal currentUser){
+        ApplicationUser applicationUser = applicationUserRepository.findById(currentUser.getId()).orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUser.getId()));
         Task task = new Task();
         task.setTitle(taskRequest.getTitle());
         task.setDescription(taskRequest.getDescription());
         task.setLevel(taskRequest.getLevel());
+        task.setUser(applicationUser);
         Instant now = Instant.now();
         return taskRepository.save(task);
     }
@@ -52,4 +65,35 @@ public class TaskService {
 
         return ModelMapper.mapToTaskResponse(task, creator);
     }
+
+    public List<TaskResponse> getTasksCreatedBy(String username, UserPrincipal currentUser){
+        // checks to see if the username exists in the database
+        ApplicationUser applicationUser = applicationUserRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Application User", "Username", username));
+
+
+        Pageable wholepage = Pageable.unpaged();
+        Page<Task> tasks = taskRepository.findAll(wholepage);
+
+        List<TaskResponse> taskResponses = tasks.map((task) -> {
+            return ModelMapper.mapToTaskResponse(
+                    task,
+                    applicationUser
+            );
+        }).getContent();
+
+        return taskResponses;
+    }
+
+    public Map<Long, ApplicationUser> getTaskCreatorMap(List<Task> tasks){
+        List<Long> creatorIds = tasks.stream()
+                .map(Task::getCreatedBy)
+                .distinct()
+                .collect(Collectors.toList());
+        List<ApplicationUser> creators = applicationUserRepository.findByIdIn(creatorIds);
+        Map<Long, ApplicationUser> creatorMap = creators.stream()
+                .collect(Collectors.toMap(ApplicationUser::getId, Function.identity()));
+        return creatorMap;
+    }
+
 }
