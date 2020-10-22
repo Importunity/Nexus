@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 /**
  * @Author Amadeus
  * signup request api
+ * this class is used whenever someone prompts to register
  */
 
 public class RegisterRequest {
