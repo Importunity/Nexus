@@ -12,3 +12,6 @@ export const EMAIL_MAX_LENGTH = 40;
 export const PASSWORD_MIN_LENGTH = 8;
 export const PASSWORD_MAX_LENGTH = 20;
 export const PHONE_MAX_LENGTH = 20;
+// project constants
+export const PROJECT_NAME_MAX = 50;
+export const PROJECT_DESCRIPTION_MAX = 300;
