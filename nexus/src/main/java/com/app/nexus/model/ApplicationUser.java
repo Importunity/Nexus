@@ -8,7 +8,10 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @Author Amadeus
@@ -16,7 +19,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="users")
-@Data
+//@Data
 public class ApplicationUser extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,14 +80,12 @@ public class ApplicationUser extends DateAudit {
 
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_projects",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id"))
-    private Set<Project> projects;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    Set<ApplicationUserProject> projects;
 
     // users can have many tasks
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Task> tasks;
 
     public ApplicationUser(){}
@@ -96,6 +97,23 @@ public class ApplicationUser extends DateAudit {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password_hash = password_hash;
+    }
+
+
+    public Set<ApplicationUserProject> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<ApplicationUserProject> projects) {
+        this.projects = projects;
+    }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public Long getId() {
@@ -186,13 +204,13 @@ public class ApplicationUser extends DateAudit {
         this.roles = roles;
     }
 
-    public Set<Project> getProjects() {
+/*    public Set<Project> getProjects() {
         return projects;
     }
 
     public void setProjects(Set<Project> projects) {
         this.projects = projects;
-    }
+    }*/
 
     public void addTask(Task task){
         tasks.add(task);
@@ -203,4 +221,33 @@ public class ApplicationUser extends DateAudit {
         task.setUser(null);
     }
 
+    // testing
+    public void addProject(Project project){
+        ApplicationUserProject applicationUserProject = new ApplicationUserProject(new ApplicationUserProjectId(this.getId(), project.getId()), project, this);
+        this.projects.add( applicationUserProject);
+    }
+
+    public Set<ApplicationUserProjectId> getProjectIds(){
+        return this.projects
+                .stream()
+                .map(ApplicationUserProject::getId)
+                .collect(Collectors.toSet());
+    }
+    //
+
+
+    /*@Override
+    public int hashCode() {
+        return Objects.hash(username);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()){
+            return false;
+        }
+        ApplicationUser applicationUser = (ApplicationUser) obj;
+        return Objects.equals(username, applicationUser.getUsername());
+    }*/
 }
