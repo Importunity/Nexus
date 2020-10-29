@@ -69,7 +69,7 @@ public class ProjectController {
         return projectService.getProjects(currentUser);
     }
 
-    @GetMapping("/{projectId}/tasks")
+    @PostMapping("/{projectId}/tasks")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> createTask(@Valid @RequestBody TaskRequest taskRequest, @CurrentUser UserPrincipal currentUser, @PathVariable Long projectId){
         Task task = taskService.createTask(taskRequest, currentUser, projectId);
