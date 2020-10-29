@@ -2,7 +2,9 @@ package com.app.nexus.util;
 
 import com.app.nexus.information.UserSummary;
 import com.app.nexus.model.ApplicationUser;
+import com.app.nexus.model.Project;
 import com.app.nexus.model.Task;
+import com.app.nexus.response.ProjectResponse;
 import com.app.nexus.response.TaskResponse;
 
 /**
@@ -20,5 +22,13 @@ public class ModelMapper {
         taskResponse.setCreatedBy(userSummary);
 
         return taskResponse;
+    }
+
+    public static ProjectResponse mapToProjectResponse(Project project){
+        ProjectResponse projectResponse = new ProjectResponse();
+        projectResponse.setId(project.getId());
+        projectResponse.setName(project.getName());
+        projectResponse.setDescription(project.getDescription());
+        return projectResponse;
     }
 }
