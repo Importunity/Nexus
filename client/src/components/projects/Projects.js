@@ -1,9 +1,10 @@
-import { Card, CardContent, makeStyles, Typography } from '@material-ui/core';
+import { Backdrop, Button, Card, CardContent,   makeStyles, Modal,  Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { userloadProjects } from '../../api/ProjectAPI';
 import '../../styles/project.css';
+import CreateProject from './CreateProject';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
       minWidth: 275,
       backgroundColor: "#3d3f3f",
@@ -14,14 +15,18 @@ const useStyles = makeStyles({
     pos: {
       marginBottom: 12,
     },
-});
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+}));
 
 
 function Projects(props){
     const classes = useStyles();
     const[projects, setProjects] = useState([]);
     const[tasks, setTasks] = useState({tasks: []});
-    const[taskLevels, setTaskLevels] = useState({level1: [], level2: [], level3: [], level4: [], level5: []});
 
     useEffect(() => {
         (async () => {
@@ -31,43 +36,39 @@ function Projects(props){
         
     }, []);
     const projectClick = (projectId, index) => () => {
-        console.log(projects[index].tasks);
+        //console.log(projects[index].tasks);
         if(projects[index].tasks.length === 0){
-            alert("no tasks");
+            alert("Project Contains No Tasks");
         }else{
             setTasks({tasks: projects[index].tasks})
         }
         
     }
 
-    console.log(tasks);
-    useEffect(() => {
-        for(var i = 0; i < tasks.tasks.length; i++){
-            const task = tasks.tasks[i];
-            switch(task.level){
-                case 1:
-                    setTaskLevels(prevState => ({
-                        level1: [...(prevState.level1 || []), task.level]
-                    }))
-                    break;
-                case 3:
-                    setTaskLevels(prevState => ({
-                        level3: [...(prevState.level3 || []), ]
-                    }))
-                    break;
-                default: 
-                    console.log('none');
-            }
-        }
-    }, [tasks.tasks])
+    const[createProject, setCreateProject] = useState(false);
+    const createProjectClick = () => {
+        setCreateProject(true);
+    }
+
+    const closeCreateProject = () => {
+        setCreateProject(false);
+    }
+
+
+
 
 
     return (
-
         <div className="initial-container project-container">
             <div className="row">
-                <div className="col-md-3">
+                <div className="col-md-2">
                     <div className="project-sidebar">
+                        <div onClick={createProjectClick}>
+                            <Button variant="contained" color="primary" fullWidth>Create Project</Button>
+                        </div>
+                        <Modal className="projectModal" open={createProject} onClose={closeCreateProject} closeAfterTransition BackdropComponent={Backdrop}>
+                            <CreateProject createProject={createProject}></CreateProject>
+                        </Modal>
                         {projects.map((project, index) => {
                             return (
                                 <div key = {project.id} onClick={projectClick(project.id, index)}>
@@ -92,16 +93,27 @@ function Projects(props){
                         })}
                     </div>
                 </div>
-                <div className="col-md-9">
+                <div className="col-md-10">
                     <div className="task-container">
                         <div className="row">
-                            <div className="col-md-2">
+                            <div className="col-md-2 task-column">
                                 {tasks.tasks.map((task) => {
                                     return( task.level === 1?
                                         <div key={task.id}>
-                                            <Card>
+                                            <Card className="task-card" >
                                                 <CardContent>
-                                                    {task.level}
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Title:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.title}
+                                                    </Typography>
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Description:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.description}
+                                                    </Typography>
                                                 </CardContent>
                                             </Card>
                                         </div> : null
@@ -109,13 +121,24 @@ function Projects(props){
                                 })}
                                 
                             </div>
-                            <div className="col-md-2">
+                            <div className="col-md-2 task-column">
                                 {tasks.tasks.map((task) => {
                                     return( task.level === 2?
                                         <div key={task.id}>
-                                            <Card>
+                                            <Card className="task-card" >
                                                 <CardContent>
-                                                    {task.level}
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Title:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.title}
+                                                    </Typography>
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Description:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.description}
+                                                    </Typography>
                                                 </CardContent>
                                             </Card>
                                         </div> : null
@@ -123,13 +146,24 @@ function Projects(props){
                                 })}
                                 
                             </div>
-                            <div className="col-md-2">
+                            <div className="col-md-2 task-column">
                                 {tasks.tasks.map((task) => {
                                     return( task.level === 3?
                                         <div key={task.id}>
-                                            <Card>
+                                            <Card className="task-card" >
                                                 <CardContent>
-                                                    {task.level}
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Title:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.title}
+                                                    </Typography>
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Description:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.description}
+                                                    </Typography>
                                                 </CardContent>
                                             </Card>
                                         </div> : null
@@ -137,13 +171,24 @@ function Projects(props){
                                 })}
                                 
                             </div>
-                            <div className="col-md-2">
+                            <div className="col-md-2 task-column">
                                 {tasks.tasks.map((task) => {
                                     return( task.level === 4?
                                         <div key={task.id}>
-                                            <Card>
+                                            <Card className="task-card" >
                                                 <CardContent>
-                                                    {task.level}
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Title:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.title}
+                                                    </Typography>
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Description:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.description}
+                                                    </Typography>
                                                 </CardContent>
                                             </Card>
                                         </div> : null
@@ -151,19 +196,29 @@ function Projects(props){
                                 })}
                                 
                             </div>
-                            <div className="col-md-2">
+                            <div className="col-md-2 task-column">
                                 {tasks.tasks.map((task) => {
                                     return( task.level === 5?
                                         <div key={task.id}>
-                                            <Card>
+                                            <Card className="task-card" >
                                                 <CardContent>
-                                                    {task.level}
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Title:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.title}
+                                                    </Typography>
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Description:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.description}
+                                                    </Typography>
                                                 </CardContent>
                                             </Card>
                                         </div> : null
                                     )
                                 })}
-                                
                             </div>
                         </div>
                     </div>
