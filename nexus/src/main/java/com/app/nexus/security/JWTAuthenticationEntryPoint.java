@@ -14,6 +14,7 @@ import java.io.IOException;
 /**
  * @Author Amadeus
  * Used for whenever an exception is thrown due to an unauthorized user trying to access a resource that requires authentication
+ * 401
  */
 @Component
 public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint {
