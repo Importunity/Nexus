@@ -12,7 +12,7 @@ public class ProjectRequest {
     @Size(max = 50)
     private String name;
     @NotBlank
-    @Size(max = 100)
+    @Size(max = 300)
     private String description;
 
     public String getDescription() {
