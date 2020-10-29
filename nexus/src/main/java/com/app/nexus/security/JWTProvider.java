@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @Author Amadeus
@@ -27,6 +28,7 @@ public class JWTProvider {
 
     @Value("${app.jwtExpiration}")
     private int jwtExpiration;
+
 
     public String generateToken(Authentication authenticate){
         // authenticates the user
