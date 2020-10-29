@@ -1,6 +1,22 @@
 .project-container{
     overflow-x: hidden;
+    overflow-y: visible !important;
 }
 .project-sidebar{
-    height: auto;
+    min-height: 100vh !important;
+    background-color: rgb(69, 83, 83);
+}
+
+.project-card{
+    margin-bottom: 3vh;
+}
+
+.task-container{
+    margin-left: -2%;
+    min-height: 100vh;
+    background-color: #304849;
+}
+
+.level{
+    margin-bottom: 3%;
 }
