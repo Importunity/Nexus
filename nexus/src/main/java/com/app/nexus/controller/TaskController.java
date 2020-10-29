@@ -45,26 +45,12 @@ public class TaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
 
-
-    @PostMapping
+    @PostMapping("/{projectId}/tasks")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> createTask(@Valid @RequestBody TaskRequest taskRequest, @CurrentUser UserPrincipal currentUser){
+    public void createTask(@Valid @RequestBody TaskRequest taskRequest, @CurrentUser UserPrincipal currentUser, @PathVariable Long projectId){
+        taskService.createTask(taskRequest, currentUser, projectId);
 
-
-        Task task = taskService.createTask(taskRequest, currentUser);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{taskId}")
-                .buildAndExpand(task.getId())
-                .toUri();
-
-        return ResponseEntity
-                .created(location)
-                .body(new APIResponse(true, "Task Created"));
     }
-
-
 
 
     @GetMapping("/{taskId}")
