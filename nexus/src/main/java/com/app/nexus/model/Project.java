@@ -1,6 +1,9 @@
 package com.app.nexus.model;
 
 import com.app.nexus.audit.DateAudit;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,7 +16,7 @@ import java.util.Set;
  */
 
 @Entity
-@Data
+//@Data
 @Table(name="projects")
 public class Project extends DateAudit {
     @Id
@@ -28,30 +31,35 @@ public class Project extends DateAudit {
 
     @NotBlank
     @Column(name = "description")
-    @Size(max = 100)
+    @Size(max = 300)
     private String description;
+
 
     // a project can have multiple tasks
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
     private Set<Task> tasks;
 
-    //@ManyToMany(fetch = FetchType.LAZY, mappedBy = "projects")
-    //private Set<ApplicationUser> applicationUsers;
 
-    public Project(){}
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    private Set<ApplicationUserProject> users;
 
-    public Project(Long id, @NotBlank String name) {
-        this.id = id;
-        this.name = name;
+
+    public Set<ApplicationUserProject> getUsers() {
+        return users;
     }
 
-    /*public Set<ApplicationUser> getApplicationUsers() {
-        return applicationUsers;
+    public void setUsers(Set<ApplicationUserProject> users) {
+        this.users = users;
     }
 
-    public void setApplicationUsers(Set<ApplicationUser> applicationUsers) {
-        this.applicationUsers = applicationUsers;
-    }*/
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
 
     public Long getId() {
         return id;
@@ -76,4 +84,16 @@ public class Project extends DateAudit {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public void addTask(Task task){
+        this.tasks.add(task);
+        task.setProject(this);
+    }
+
+    public void removeTask(Task task){
+        tasks.remove(task);
+        task.setProject(null);
+    }
+
+
 }
