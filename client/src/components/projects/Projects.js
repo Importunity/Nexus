@@ -30,8 +30,13 @@ function Projects(props){
         })();
         
     }, []);
-    const projectClick = projectId => () => {
-        setTasks({tasks: projects[projectId - 1].tasks})
+    const projectClick = (projectId, index) => () => {
+        console.log(projects[index].tasks);
+        if(projects[index].tasks.length === 0){
+            alert("no tasks");
+        }else{
+            setTasks({tasks: projects[index].tasks})
+        }
         
     }
 
@@ -55,7 +60,6 @@ function Projects(props){
             }
         }
     }, [tasks.tasks])
-    console.log(taskLevels.level3.length)
 
 
     return (
@@ -64,9 +68,9 @@ function Projects(props){
             <div className="row">
                 <div className="col-md-3">
                     <div className="project-sidebar">
-                        {projects.map((project) => {
+                        {projects.map((project, index) => {
                             return (
-                                <div key = {project.id} onClick={projectClick(project.id)}>
+                                <div key = {project.id} onClick={projectClick(project.id, index)}>
                                     <Card className={classes.root, "project-card"} variant="outlined">
                                         <CardContent>
                                             <Typography className={classes.title} color="primary" gutterBottom>
