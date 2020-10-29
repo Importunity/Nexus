@@ -61,6 +61,8 @@ function NavigationBar() {
         loadUser();
     }, [])
 
+    //console.log(logged.currentUser);
+
 
     
 
@@ -79,9 +81,6 @@ function NavigationBar() {
                       <Button >
                         <Link to={'/projects'} className="menu-item">Projects</Link>
                       </Button>
-                      <Button >
-                        <Link to={'/account'} className="menu-item">Projects</Link>
-                      </Button>
                       <Button className="menu-item" onClick={logoutUser}>Logout</Button>
                     </div>
                   ) : null}
@@ -98,7 +97,7 @@ function NavigationBar() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={() => <Login onLoad={loadUser} />} />
-          <PrivateRoute isAuthenticated={logged.isAuthenticated} path="/projects" component={Projects}></PrivateRoute>
+          <PrivateRoute isAuthenticated={logged.isAuthenticated} path="/projects" component={Projects} />
         </Switch>
       </Router>
     </div>
