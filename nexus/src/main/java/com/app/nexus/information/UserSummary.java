@@ -1,5 +1,7 @@
 package com.app.nexus.information;
 
+import com.app.nexus.model.Project;
+
 /**
  * @Author Amadeus
  */
