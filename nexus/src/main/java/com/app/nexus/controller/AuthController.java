@@ -90,4 +90,5 @@ public class AuthController {
                 .buildAndExpand(saveUser.getUsername()).toUri();
         return ResponseEntity.created(location).body(new APIResponse(true, "User registered successfully"));
     }
+
 }
