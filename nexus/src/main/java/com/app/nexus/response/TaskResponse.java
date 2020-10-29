@@ -2,6 +2,7 @@ package com.app.nexus.response;
 
 import com.app.nexus.information.UserSummary;
 import com.app.nexus.model.ApplicationUser;
+import com.app.nexus.model.Project;
 
 import java.time.Instant;
 
@@ -18,6 +19,15 @@ public class TaskResponse {
     private Instant taskCreated;
     // checks to see if the task has been completed
     private Boolean isCompleted;
+    private String projectName;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     public Long getId() {
         return id;
