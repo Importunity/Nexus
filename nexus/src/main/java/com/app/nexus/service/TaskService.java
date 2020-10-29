@@ -3,6 +3,7 @@ package com.app.nexus.service;
 import com.app.nexus.exception.ResourceNotFoundException;
 import com.app.nexus.information.UserPrincipal;
 import com.app.nexus.model.ApplicationUser;
+import com.app.nexus.model.Project;
 import com.app.nexus.model.Task;
 import com.app.nexus.repository.ApplicationUserRepository;
 import com.app.nexus.repository.ProjectRepository;
@@ -42,16 +43,19 @@ public class TaskService {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
-    public Task createTask(TaskRequest taskRequest, UserPrincipal currentUser){
+
+    public Task createTask(TaskRequest taskRequest, UserPrincipal currentUser, Long projectId){
         ApplicationUser applicationUser = applicationUserRepository.findById(currentUser.getId()).orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUser.getId()));
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project", "id", projectId));
         Task task = new Task();
         task.setTitle(taskRequest.getTitle());
         task.setDescription(taskRequest.getDescription());
         task.setLevel(taskRequest.getLevel());
         task.setUser(applicationUser);
-        Instant now = Instant.now();
+        project.addTask(task);
         return taskRepository.save(task);
     }
+
 
     public TaskResponse getTaskById(Long taskId, UserPrincipal currentUser){
         Task task = taskRepository
