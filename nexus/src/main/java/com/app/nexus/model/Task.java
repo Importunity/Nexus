@@ -1,19 +1,24 @@
 package com.app.nexus.model;
 
 import com.app.nexus.audit.ApplicationUserDateAudit;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 /**
  * @Author Amadeus
  */
 
 @Entity
-@Data
+//@Data
 @Table(name = "tasks")
 public class Task extends ApplicationUserDateAudit {
     @Id
@@ -34,14 +39,20 @@ public class Task extends ApplicationUserDateAudit {
     @Column(name = "level")
     private int level;
 
-    @ManyToOne
+    @Column(name="is_completed")
+    private Boolean isCompleted;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id")
     private Project project;
 
     // a task can only be associated with one user
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private ApplicationUser user;
+
 
     public ApplicationUser getUser() {
         return user;
