@@ -8,9 +8,9 @@ import 'bootstrap/dist/js/bootstrap';
 import 'jquery/dist/jquery';
 
 ReactDOM.render(
-  <React.StrictMode>
+
     <App />
-  </React.StrictMode>,
+            ,
   document.getElementById('root')
 );
 
