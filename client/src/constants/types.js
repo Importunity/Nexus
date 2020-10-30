@@ -15,3 +15,5 @@ export const PHONE_MAX_LENGTH = 20;
 // project constants
 export const PROJECT_NAME_MAX = 50;
 export const PROJECT_DESCRIPTION_MAX = 300;
+// task constants
+export const TASK_TITLE_MAX = 100
