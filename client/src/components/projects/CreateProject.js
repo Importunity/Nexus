@@ -1,4 +1,4 @@
-import {  Fade, makeStyles, TextField } from '@material-ui/core';
+import { Button, makeStyles, TextField } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import React, { useEffect, useState } from 'react';
 import { createProject as createProjectAPI } from '../../api/ProjectAPI';
@@ -56,31 +56,20 @@ function CreateProject(props){
         }
     }
     return(
-            <Fade in={props.createProject}>
-                <div className={classes.paper}>
-                    <form onSubmit={projectCreateSubmit}>
-                        <h1 className="creation-field">Project Creation</h1>
-                        <TextField className="creation-field" required label="Project Name:" fullWidth name="name" onChange={projectFieldsChange}/>
-                        {projectInfo.name.length > PROJECT_NAME_MAX? 
-                            <Alert className="creation-field" severity="error">name length is greater than {PROJECT_NAME_MAX} characters</Alert> : null 
-                        }
-                        <TextField
-                            className="creation-field"
-                            label="Project Description"
-                            multiline
-                            rows={5}
-                            variant="filled"
-                            fullWidth
-                            name="description"
-                            onChange={projectFieldsChange}
-                        />
-                        {projectInfo.description.length > PROJECT_DESCRIPTION_MAX? 
-                            <Alert className="creation-field" severity="error">description length is greater than {PROJECT_DESCRIPTION_MAX} characters</Alert> : null 
-                        }
-                        <button>Hello</button>
-                    </form>
-                </div>
-            </Fade>
+        <div className={classes.paper}>
+            <form onSubmit={projectCreateSubmit}>
+                <h1 className="creation-field">Project Creation</h1>
+                <TextField className="creation-field" required label="Project Name:" fullWidth name="name" onChange={projectFieldsChange}/>
+                {projectInfo.name.length > PROJECT_NAME_MAX? 
+                    <Alert className="creation-field" severity="error">name length is greater than {PROJECT_NAME_MAX} characters</Alert> : null 
+                }
+                <TextField className="creation-field" label="Project Description" multiline rows={5} variant="filled" fullWidth name="description" onChange={projectFieldsChange} />
+                {projectInfo.description.length > PROJECT_DESCRIPTION_MAX? 
+                    <Alert className="creation-field" severity="error">description length is greater than {PROJECT_DESCRIPTION_MAX} characters</Alert> : null 
+                }
+                <Button type="submit" label="Submit" color="primary" variant="contained">Submit</Button>
+            </form>
+        </div>
     );
 }
 
