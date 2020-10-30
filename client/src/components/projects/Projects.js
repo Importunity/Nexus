@@ -1,8 +1,10 @@
-import { Backdrop, Button, Card, CardContent,   makeStyles, Modal,  Typography } from '@material-ui/core';
+import { Backdrop, Button, Card, CardContent,   Fab,  Fade,  makeStyles, Modal,  Tooltip,  Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { userloadProjects } from '../../api/ProjectAPI';
 import '../../styles/project.css';
 import CreateProject from './CreateProject';
+import AddIcon from '@material-ui/icons/Add';
+import CreateTask from '../task/CreateTask';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,7 +29,7 @@ function Projects(props){
     const classes = useStyles();
     const[projects, setProjects] = useState([]);
     const[tasks, setTasks] = useState({tasks: []});
-
+    const[currentProjectId, setCurrentProjectId] = useState(null);
     useEffect(() => {
         (async () => {
             let response = await userloadProjects();
@@ -35,14 +37,12 @@ function Projects(props){
         })();
         
     }, []);
-    const projectClick = (projectId, index) => () => {
+    const projectClick = (projectId, index) => (event) => {
+        setCurrentProjectId(projectId);
         //console.log(projects[index].tasks);
-        if(projects[index].tasks.length === 0){
-            alert("Project Contains No Tasks");
-        }else{
+        if(projects[index].tasks.length !== 0){
             setTasks({tasks: projects[index].tasks})
         }
-        
     }
 
     const[createProject, setCreateProject] = useState(false);
@@ -54,6 +54,13 @@ function Projects(props){
         setCreateProject(false);
     }
 
+    const[createTask, setCreateTask] = useState(false);
+    const createTaskClick = () => {
+        setCreateTask(true);
+    }
+    const closeCreateTask = () => {
+        setCreateTask(false);
+    }
 
 
 
@@ -63,11 +70,11 @@ function Projects(props){
             <div className="row">
                 <div className="col-md-2">
                     <div className="project-sidebar">
-                        <div onClick={createProjectClick}>
-                            <Button variant="contained" color="primary" fullWidth>Create Project</Button>
-                        </div>
-                        <Modal className="projectModal" open={createProject} onClose={closeCreateProject} closeAfterTransition BackdropComponent={Backdrop}>
-                            <CreateProject createProject={createProject}></CreateProject>
+                        <Button className="project-card" type="button" variant="contained" color="primary" fullWidth onClick={createProjectClick}>Create Project</Button>
+                        <Modal open={createProject} onClose={closeCreateProject} closeAfterTransition BackdropComponent={Backdrop}>
+                            <Fade in={createProject}>
+                                <CreateProject></CreateProject>
+                            </Fade>
                         </Modal>
                         {projects.map((project, index) => {
                             return (
@@ -86,11 +93,23 @@ function Projects(props){
                                             <Typography variant="body1" component="p">
                                                 {project.description}
                                             </Typography>
+                                            <Tooltip title="Create Task" aria-label="Create Task"  className="plus-icon">
+                                                <div onClick={createTaskClick}>
+                                                    <Fab color="primary" size="small" >
+                                                        <AddIcon />
+                                                    </Fab>
+                                                </div>
+                                            </Tooltip>
                                         </CardContent>
                                     </Card>
                                 </div>
                             )
                         })}
+                        <Modal open={createTask} onClose={closeCreateTask} closeAfterTransition BackdropComponent={Backdrop}>
+                            <Fade in={createTask}>
+                                <CreateTask currentProjectId={currentProjectId}></CreateTask>
+                            </Fade>
+                        </Modal>
                     </div>
                 </div>
                 <div className="col-md-10">
