@@ -7,7 +7,7 @@
 }
 
 .project-card{
-    margin-bottom: 3vh;
+    margin-bottom: 3vh !important;
 }
 
 .task-container{
@@ -36,4 +36,10 @@
 
 .creation-field{
     margin-bottom: 5vh !important;
+}
+
+.plus-icon{
+    margin-left: 11vw !important;
+    margin-top: 2vh !important;
+    margin-bottom: 2vh !important;
 }
