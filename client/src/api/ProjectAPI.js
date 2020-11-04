@@ -19,5 +19,12 @@ export function userloadProjects(projectRequest){
 
 }
 
+export function removeProject(projectRequest){
+    return request({
+        url: BASE_URL + "/projects/" + projectRequest.projectId,
+        method: "DELETE",
+        body: JSON.stringify(projectRequest)
+    })
+}
 
 
