@@ -10,3 +10,19 @@ export function createTask(taskRequest){
         body: JSON.stringify(taskRequest)
     })
 }
+
+export function removeTask(taskRequest){
+    return request({
+        url: BASE_URL + "/projects/" + taskRequest.projectId + "/" + taskRequest.taskId,
+        method: "DELETE",
+        body: JSON.stringify(taskRequest)
+    })
+}
+
+export function updateTask(taskRequest){
+    return request({
+        url: BASE_URL + "/projects/" + taskRequest.projectId + "/" + taskRequest.task.id,
+        method: "PUT",
+        body: JSON.stringify(taskRequest)
+    })
+}
