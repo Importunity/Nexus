@@ -70,6 +70,24 @@ public class TaskService {
         return ModelMapper.mapToTaskResponse(task, creator);
     }
 
+    public Task removeTask(Long taskId,Long projectId,UserPrincipal currentUser){
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project", "id", projectId));
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new ResourceNotFoundException("Task", "id", taskId));
+        ApplicationUser applicationUser = applicationUserRepository.findById(currentUser.getId()).orElseThrow(() -> new ResourceNotFoundException("Current User", "id", currentUser.getId()));
+        project.removeTask(task);
+        applicationUser.removeTask(task);
+        return taskRepository.save(task);
+    }
+
+    public Task updateTask(Long taskId, Long projectId, TaskRequest taskRequest){
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project", "id", projectId));
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new ResourceNotFoundException("Task", "id", taskId));
+        task.setTitle(taskRequest.getTitle());
+        task.setDescription(taskRequest.getDescription());
+        task.setLevel(taskRequest.getLevel());
+        return taskRepository.save(task);
+    }
+
     public List<TaskResponse> getTasksCreatedBy(String username, UserPrincipal currentUser){
         // checks to see if the username exists in the database
         ApplicationUser applicationUser = applicationUserRepository.findByUsername(username)
