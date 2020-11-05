@@ -81,11 +81,11 @@ public class ApplicationUser extends DateAudit {
 
 
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = false)
     Set<ApplicationUserProject> projects;
 
     // users can have many tasks
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Task> tasks;
 
     public ApplicationUser(){}
@@ -221,11 +221,25 @@ public class ApplicationUser extends DateAudit {
         task.setUser(null);
     }
 
-    // testing
+
+    public void removeProject(Project project){
+        for(Iterator<ApplicationUserProject> iterator = projects.iterator(); iterator.hasNext();){
+            ApplicationUserProject applicationUserProject = iterator.next();
+            if(applicationUserProject.getUser().equals(this) && applicationUserProject.getProject().equals(project)){
+                iterator.remove();
+                applicationUserProject.getProject().getUsers().remove(applicationUserProject);
+                applicationUserProject.setUser(null);
+                applicationUserProject.setProject(null);
+            }
+        }
+    }
+
     public void addProject(Project project){
         ApplicationUserProject applicationUserProject = new ApplicationUserProject(new ApplicationUserProjectId(this.getId(), project.getId()), project, this);
         this.projects.add( applicationUserProject);
     }
+
+
 
     public Set<ApplicationUserProjectId> getProjectIds(){
         return this.projects
@@ -233,7 +247,6 @@ public class ApplicationUser extends DateAudit {
                 .map(ApplicationUserProject::getId)
                 .collect(Collectors.toSet());
     }
-    //
 
 
     /*@Override
