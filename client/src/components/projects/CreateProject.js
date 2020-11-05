@@ -1,6 +1,6 @@
 import { Button, makeStyles, TextField } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { createProject as createProjectAPI } from '../../api/ProjectAPI';
 import { PROJECT_DESCRIPTION_MAX, PROJECT_NAME_MAX } from '../../constants/types';
 import '../../styles/project.css';
@@ -26,6 +26,7 @@ function CreateProject(props){
     const classes = useStyles();
 
     const[errors, setErrors] = useState(false);
+    const[success, setSuccess] = useState(false);
 
 
     const[projectInfo, setProjectInfo] = useState({name: '', description: ''});
@@ -49,9 +50,11 @@ function CreateProject(props){
                 .then(response => {
                     console.log(response);
                     console.log("registration success");
+                    setSuccess(true)
                 }).catch(error => {
                     console.log("oops something went wrong")
                     console.log(error);
+                    setSuccess(false);
                 })
         }
     }
@@ -68,6 +71,10 @@ function CreateProject(props){
                     <Alert className="creation-field" severity="error">description length is greater than {PROJECT_DESCRIPTION_MAX} characters</Alert> : null 
                 }
                 <Button type="submit" label="Submit" color="primary" variant="contained">Submit</Button>
+                {success? (
+                        <Alert className="creation-field" severity="success">Project Created</Alert> 
+                    ): null 
+                }
             </form>
         </div>
     );
