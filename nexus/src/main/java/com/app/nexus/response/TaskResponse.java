@@ -3,6 +3,7 @@ package com.app.nexus.response;
 import com.app.nexus.information.UserSummary;
 import com.app.nexus.model.ApplicationUser;
 import com.app.nexus.model.Project;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.Instant;
 
