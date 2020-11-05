@@ -85,21 +85,27 @@ public class ProjectController {
                 .body(new APIResponse(true, "Task Created"));
     }
 
-
-    /*@PostMapping("/{projectId}/tasks")
+    @DeleteMapping("/{projectId}/{taskId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> addTask(@CurrentUser UserPrincipal currentUser, @PathVariable Long projectId, @Valid @RequestBody TaskRequest taskRequest){
-        Task task = projectService.addTask(projectId, currentUser, taskRequest);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{taskId}")
-                .buildAndExpand(task.getId())
-                .toUri();
+    public Task removeTask(@PathVariable Long taskId, @PathVariable Long projectId, @CurrentUser UserPrincipal currentUser){
+        Task task = taskService.removeTask(taskId, projectId, currentUser);
 
-        return ResponseEntity
-                .created(location)
-                .body(new APIResponse(true, "Task Created"));
-    }*/
+        return task;
+    }
+
+    @PutMapping("/{projectId}/{taskId}")
+    @PreAuthorize("hasRole('USER')")
+    public Task updateTask(@PathVariable Long projectId, @PathVariable Long taskId, @Valid @RequestBody TaskRequest taskRequest){
+        Task task = taskService.updateTask(taskId, projectId, taskRequest);
+        return task;
+    }
+
+    @DeleteMapping("/{projectId}")
+    @PreAuthorize("hasRole('USER')")
+    public Project removeProject(@PathVariable Long projectId, @CurrentUser UserPrincipal currentUser){
+        Project project = projectService.removeProject(currentUser, projectId);
+        return project;
+    }
 
 
 }
