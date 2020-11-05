@@ -36,11 +36,11 @@ public class Project extends DateAudit {
 
 
     // a project can have multiple tasks
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
     private Set<Task> tasks;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
     private Set<ApplicationUserProject> users;
 
 
