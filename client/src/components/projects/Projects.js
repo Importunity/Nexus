@@ -1,10 +1,15 @@
-import { Backdrop, Button, Card, CardContent,   Fab,  Fade,  makeStyles, Modal,  Tooltip,  Typography } from '@material-ui/core';
+import { Backdrop, Button, Card, CardContent,   Divider,   Fab,  Fade,  makeStyles, Modal,  Tooltip,  Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { userloadProjects } from '../../api/ProjectAPI';
+import { removeProject, userloadProjects } from '../../api/ProjectAPI';
 import '../../styles/project.css';
 import CreateProject from './CreateProject';
 import AddIcon from '@material-ui/icons/Add';
 import CreateTask from '../task/CreateTask';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { removeTask } from '../../api/TaskAPI';
+import EditIcon from '@material-ui/icons/Edit';
+import EditTask from '../task/EditTask';
+import DeleteProject from './DeleteProject';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,8 +40,8 @@ function Projects(props){
             let response = await userloadProjects();
             setProjects(response);
         })();
-        
     }, []);
+
     const projectClick = (projectId, index) => (event) => {
         setCurrentProjectId(projectId);
         //console.log(projects[index].tasks);
@@ -62,9 +67,57 @@ function Projects(props){
         setCreateTask(false);
     }
 
+    const createTaskHandler = (task) => {
+        // adding the task into the array of tasks
+        setTasks(prevState => ({tasks: [prevState.tasks, task]}));
+    }
 
+    const[deleteTask, setDeleteTask] = useState({taskId: null, projectId: null, index: null});
+    const deleteTaskClick = (taskId, projectId) => (event) => {
+        setTasks({tasks: tasks.tasks.filter(otherIndex => otherIndex.id !== taskId)})
+        setDeleteTask({taskId: taskId, projectId: projectId})
+    }
+    useEffect(() => {
+        const taskRequest = deleteTask;
 
+        removeTask(taskRequest).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+    }, [deleteTask])
 
+    const[editTask, setEditTask] = useState(false);
+    const[taskToEdit, setTaskToEdit] = useState({task: [], projectId: null});
+    const editTaskClick = () => {
+        setEditTask(true);
+    }
+    const closeEditTask = () => {
+        setEditTask(false);
+    }
+
+    const editTaskHandler = (task, projectId) => (event) => {
+        editTaskClick();
+        setTaskToEdit({task: task, projectId: projectId});
+    }
+
+    // remove project
+    const[deleteProject, setDeleteProject] = useState({projectId: null});
+    const removeProjectClick = () => {
+        //console.log(projects[0].id);
+        setProjects(projects.filter(project => project.id !== currentProjectId));
+        setDeleteProject({projectId: currentProjectId});
+    }
+
+    useEffect(() => {
+        const projectRequest = deleteProject;
+        removeProject(projectRequest).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        })
+    }, [deleteProject])
+    
     return (
         <div className="initial-container project-container">
             <div className="row">
@@ -82,7 +135,7 @@ function Projects(props){
                                     <Card className={classes.root, "project-card"} variant="outlined">
                                         <CardContent>
                                             <Typography className={classes.title} color="primary" gutterBottom>
-                                                {project.id - 1} : Project Name
+                                                {project.id} : Project Name
                                             </Typography>
                                             <Typography className={classes.pos} color="textPrimary" variant="h5">
                                                 {project.name}
@@ -93,13 +146,25 @@ function Projects(props){
                                             <Typography variant="body1" component="p">
                                                 {project.description}
                                             </Typography>
-                                            <Tooltip title="Create Task" aria-label="Create Task"  className="plus-icon">
-                                                <div onClick={createTaskClick}>
-                                                    <Fab color="primary" size="small" >
-                                                        <AddIcon />
-                                                    </Fab>
+                                            <div className="row">
+                                                <div className="col-4">
+                                                    <Tooltip title="Create Task" aria-label="Create Task" >
+                                                        <div onClick={createTaskClick}>
+                                                            <Fab color="primary" size="small" >
+                                                                <AddIcon />
+                                                            </Fab>
+                                                        </div>
+                                                    </Tooltip>
                                                 </div>
-                                            </Tooltip>
+                                                <div className="col-4"></div>
+                                                <div className="col-4">
+                                                    <Tooltip title="Delete Project" aria-label="Delete Project"  className="delete-icon">
+                                                        <div onClick={removeProjectClick}>
+                                                            <DeleteProject deleteProject={deleteProject} />
+                                                        </div>
+                                                    </Tooltip>
+                                                </div>
+                                            </div>
                                         </CardContent>
                                     </Card>
                                 </div>
@@ -107,16 +172,21 @@ function Projects(props){
                         })}
                         <Modal open={createTask} onClose={closeCreateTask} closeAfterTransition BackdropComponent={Backdrop}>
                             <Fade in={createTask}>
-                                <CreateTask currentProjectId={currentProjectId}></CreateTask>
+                                <CreateTask createTaskHandler={createTaskHandler} tasks={tasks} currentProjectId={currentProjectId}></CreateTask>
                             </Fade>
                         </Modal>
                     </div>
                 </div>
+                <Modal open={editTask} onClose={closeEditTask} closeAfterTransition BackdropComponent={Backdrop}>
+                    <Fade in={editTask}>
+                        <EditTask taskToEdit={taskToEdit} />
+                    </Fade>
+                </Modal>
                 <div className="col-md-10">
                     <div className="task-container">
                         <div className="row">
                             <div className="col-md-2 task-column">
-                                {tasks.tasks.map((task) => {
+                                {tasks.tasks.map((task, index) => {
                                     return( task.level === 1?
                                         <div key={task.id}>
                                             <Card className="task-card" >
@@ -133,6 +203,29 @@ function Projects(props){
                                                     <Typography>
                                                         {task.description}
                                                     </Typography>
+                                                    <Divider></Divider>
+                                                    <div className="row">
+                                                        <div className="col-3">
+                                                            <Tooltip title="Delete Task" aria-label="Delete Task" className="task-icon">
+                                                                <div onClick={deleteTaskClick(task.id, currentProjectId)}>
+                                                                    <Fab color="primary" size="small">
+                                                                        <DeleteIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3">
+                                                            <Tooltip title="Edit Task" aria-label="Edit Task"  className="task-icon">
+                                                                <div onClick={editTaskHandler(task, currentProjectId)}>
+                                                                    <Fab color="primary" size="small" >
+                                                                        <EditIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3"></div>
+                                                        <div className="col-3"></div>
+                                                    </div>
                                                 </CardContent>
                                             </Card>
                                         </div> : null
@@ -158,6 +251,29 @@ function Projects(props){
                                                     <Typography>
                                                         {task.description}
                                                     </Typography>
+                                                    <Divider></Divider>
+                                                    <div className="row">
+                                                        <div className="col-3">
+                                                            <Tooltip title="Delete Task" aria-label="Delete Task" className="task-icon">
+                                                                <div onClick={deleteTaskClick(task.id, currentProjectId)}>
+                                                                    <Fab color="primary" size="small">
+                                                                        <DeleteIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3">
+                                                            <Tooltip title="Edit Task" aria-label="Edit Task"  className="task-icon">
+                                                                <div onClick={editTaskHandler(task, currentProjectId)}>
+                                                                    <Fab color="primary" size="small" >
+                                                                        <EditIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3"></div>
+                                                        <div className="col-3"></div>
+                                                    </div>
                                                 </CardContent>
                                             </Card>
                                         </div> : null
@@ -183,6 +299,29 @@ function Projects(props){
                                                     <Typography>
                                                         {task.description}
                                                     </Typography>
+                                                    <Divider></Divider>
+                                                    <div className="row">
+                                                        <div className="col-3">
+                                                            <Tooltip title="Delete Task" aria-label="Delete Task" className="task-icon">
+                                                                <div onClick={deleteTaskClick(task.id, currentProjectId)}>
+                                                                    <Fab color="primary" size="small">
+                                                                        <DeleteIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3">
+                                                            <Tooltip title="Edit Task" aria-label="Edit Task"  className="task-icon">
+                                                                <div onClick={editTaskHandler(task, currentProjectId)}>
+                                                                    <Fab color="primary" size="small" >
+                                                                        <EditIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3"></div>
+                                                        <div className="col-3"></div>
+                                                    </div>
                                                 </CardContent>
                                             </Card>
                                         </div> : null
@@ -208,6 +347,29 @@ function Projects(props){
                                                     <Typography>
                                                         {task.description}
                                                     </Typography>
+                                                    <Divider></Divider>
+                                                    <div className="row">
+                                                        <div className="col-3">
+                                                            <Tooltip title="Delete Task" aria-label="Delete Task" className="task-icon">
+                                                                <div onClick={deleteTaskClick(task.id, currentProjectId)}>
+                                                                    <Fab color="primary" size="small">
+                                                                        <DeleteIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3">
+                                                            <Tooltip title="Edit Task" aria-label="Edit Task"  className="task-icon">
+                                                                <div onClick={editTaskHandler(task, currentProjectId)}>
+                                                                    <Fab color="primary" size="small" >
+                                                                        <EditIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3"></div>
+                                                        <div className="col-3"></div>
+                                                    </div>
                                                 </CardContent>
                                             </Card>
                                         </div> : null
@@ -233,6 +395,76 @@ function Projects(props){
                                                     <Typography>
                                                         {task.description}
                                                     </Typography>
+                                                    <Divider></Divider>
+                                                    <div className="row">
+                                                        <div className="col-3">
+                                                            <Tooltip title="Delete Task" aria-label="Delete Task" className="task-icon">
+                                                                <div onClick={deleteTaskClick(task.id, currentProjectId)}>
+                                                                    <Fab color="primary" size="small">
+                                                                        <DeleteIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3">
+                                                            <Tooltip title="Edit Task" aria-label="Edit Task"  className="task-icon">
+                                                                <div onClick={editTaskHandler(task, currentProjectId)}>
+                                                                    <Fab color="primary" size="small" >
+                                                                        <EditIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3"></div>
+                                                        <div className="col-3"></div>
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        </div> : null
+                                    )
+                                })}
+                            </div>
+                            <div className="col-md-2 task-column">
+                                {tasks.tasks.map((task) => {
+                                    return( task.isCompleted?
+                                        <div key={task.id}>
+                                            <Card className="task-card" >
+                                                <CardContent>
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Title:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.title}
+                                                    </Typography>
+                                                    <Typography className={classes.title} color="primary" gutterBottom>
+                                                        Task Description:
+                                                    </Typography>
+                                                    <Typography>
+                                                        {task.description}
+                                                    </Typography>
+                                                    <Divider></Divider>
+                                                    <div className="row">
+                                                        <div className="col-3">
+                                                            <Tooltip title="Delete Task" aria-label="Delete Task" className="task-icon">
+                                                                <div onClick={deleteTaskClick(task.id, currentProjectId)}>
+                                                                    <Fab color="primary" size="small">
+                                                                        <DeleteIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3">
+                                                            <Tooltip title="Edit Task" aria-label="Edit Task"  className="task-icon">
+                                                                <div onClick={editTaskHandler(task, currentProjectId)}>
+                                                                    <Fab color="primary" size="small" >
+                                                                        <EditIcon />
+                                                                    </Fab>
+                                                                </div>
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="col-3"></div>
+                                                        <div className="col-3"></div>
+                                                    </div>
                                                 </CardContent>
                                             </Card>
                                         </div> : null
