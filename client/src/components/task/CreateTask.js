@@ -37,7 +37,8 @@ function CreateTask(props){
                 console.log(error);
             })
     }
-    console.log(taskInfo);
+
+    //console.log(taskInfo);
     return (
         <div className={classes.paper}>
             <form onSubmit={submitCreateTask}>
