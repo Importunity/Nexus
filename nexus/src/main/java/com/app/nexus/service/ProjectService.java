@@ -64,6 +64,13 @@ public class ProjectService {
         return projectResponses;
     }
 
+    public Project removeProject(UserPrincipal currentUser, Long projectId){
+        ApplicationUser applicationUser = applicationUserRepository.findById(currentUser.getId()).orElseThrow(() -> new ResourceNotFoundException("Application User", "id", currentUser.getId()));
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project" , "id", projectId));
+        applicationUser.removeProject(project);
+        return projectRepository.save(project);
+    }
+
 
 
 }
