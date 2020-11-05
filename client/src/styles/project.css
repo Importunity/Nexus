@@ -1,5 +1,5 @@
 .project-container{
-    overflow-y: visible !important;
+    overflow-y: visible;
 }
 .project-sidebar{
     min-height: 100vh !important;
@@ -23,6 +23,7 @@
 .task-card{
     margin-top: 5%;
     background-color: rgb(245, 245, 245) !important;
+    margin-bottom: 5%;
 }
 
 
@@ -32,14 +33,13 @@
     min-height: 80vh;
     background-color: wheat;
     box-shadow: 1px 1px 1px 0px darkgray;
+    margin-bottom: 3vh;
 }
 
 .creation-field{
     margin-bottom: 5vh !important;
 }
 
-.plus-icon{
-    margin-left: 11vw !important;
-    margin-top: 2vh !important;
-    margin-bottom: 2vh !important;
+.task-icon{
+    margin-top: 2vh;
 }
