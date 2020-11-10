@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author Amadeus
@@ -27,12 +28,12 @@ public class JWTProvider {
     private String jwtSecret;
 
     @Value("${app.jwtExpiration}")
-    private int jwtExpiration;
+    private long jwtExpiration;
 
 
-    public String generateToken(Authentication authenticate){
+
+    public String generateToken(UserPrincipal userPrincipal){
         // authenticates the user
-        UserPrincipal userPrincipal = (UserPrincipal) authenticate.getPrincipal();
         Date now = new Date();
         Date expiration = new Date(now.getTime() + jwtExpiration);
 
@@ -42,6 +43,10 @@ public class JWTProvider {
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
+    }
+
+    public String generateRefreshToken(){
+        return UUID.randomUUID().toString();
     }
 
     // retrieves the user id from json web token
