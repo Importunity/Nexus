@@ -35,12 +35,14 @@ function Projects(props){
     const[projects, setProjects] = useState([]);
     const[tasks, setTasks] = useState({tasks: []});
     const[currentProjectId, setCurrentProjectId] = useState(null);
+    const[count, setCount] = useState(0);
     useEffect(() => {
         (async () => {
             let response = await userloadProjects();
             setProjects(response);
         })();
-    }, []);
+    }, [count]);
+
 
     const projectClick = (projectId, index) => (event) => {
         setCurrentProjectId(projectId);
@@ -48,6 +50,10 @@ function Projects(props){
         if(projects[index].tasks.length !== 0){
             setTasks({tasks: projects[index].tasks})
         }
+    }
+
+    const handleChange = (value) => {
+        setCount(value);
     }
 
     const[createProject, setCreateProject] = useState(false);
@@ -77,9 +83,9 @@ function Projects(props){
         setTasks({tasks: tasks.tasks.filter(otherIndex => otherIndex.id !== taskId)})
         setDeleteTask({taskId: taskId, projectId: projectId})
     }
+    console.log(tasks.tasks);
     useEffect(() => {
         const taskRequest = deleteTask;
-
         removeTask(taskRequest).then(response => {
             console.log(response)
         }).catch(error => {
@@ -104,11 +110,9 @@ function Projects(props){
     // remove project
     const[deleteProject, setDeleteProject] = useState({projectId: null});
     const removeProjectClick = () => {
-        //console.log(projects[0].id);
         setProjects(projects.filter(project => project.id !== currentProjectId));
         setDeleteProject({projectId: currentProjectId});
     }
-
     useEffect(() => {
         const projectRequest = deleteProject;
         removeProject(projectRequest).then(response => {
@@ -123,10 +127,10 @@ function Projects(props){
             <div className="row">
                 <div className="col-md-2">
                     <div className="project-sidebar">
-                        <Button className="project-card" type="button" variant="contained" color="primary" fullWidth onClick={createProjectClick}>Create Project</Button>
+                        <Button className="project-card" type="button" variant="outlined" color="inherit"  fullWidth onClick={createProjectClick}>Create Project</Button>
                         <Modal open={createProject} onClose={closeCreateProject} closeAfterTransition BackdropComponent={Backdrop}>
                             <Fade in={createProject}>
-                                <CreateProject></CreateProject>
+                                <CreateProject count={count} handleChange={handleChange}></CreateProject>
                             </Fade>
                         </Modal>
                         {projects.map((project, index) => {
@@ -135,7 +139,7 @@ function Projects(props){
                                     <Card className={classes.root, "project-card"} variant="outlined">
                                         <CardContent>
                                             <Typography className={classes.title} color="primary" gutterBottom>
-                                                {project.id} : Project Name
+                                                Project Name
                                             </Typography>
                                             <Typography className={classes.pos} color="textPrimary" variant="h5">
                                                 {project.name}
@@ -170,24 +174,28 @@ function Projects(props){
                                 </div>
                             )
                         })}
-                        <Modal open={createTask} onClose={closeCreateTask} closeAfterTransition BackdropComponent={Backdrop}>
+                        <Modal  open={createTask} onClose={closeCreateTask} closeAfterTransition BackdropComponent={Backdrop}>
                             <Fade in={createTask}>
-                                <CreateTask createTaskHandler={createTaskHandler} tasks={tasks} currentProjectId={currentProjectId}></CreateTask>
+                                <CreateTask handleChange={handleChange} count={count} createTaskHandler={createTaskHandler} tasks={tasks} currentProjectId={currentProjectId}></CreateTask>
                             </Fade>
                         </Modal>
                     </div>
                 </div>
                 <Modal open={editTask} onClose={closeEditTask} closeAfterTransition BackdropComponent={Backdrop}>
                     <Fade in={editTask}>
-                        <EditTask taskToEdit={taskToEdit} />
+                        <EditTask handleChange={handleChange} count={count} taskToEdit={taskToEdit} />
                     </Fade>
                 </Modal>
                 <div className="col-md-10">
                     <div className="task-container">
                         <div className="row">
-                            <div className="col-md-2 task-column">
+                            <div className="col task-column">
+                                <Typography>
+                                    Level 1
+                                </Typography>
+                                <Divider></Divider>
                                 {tasks.tasks.map((task, index) => {
-                                    return( task.level === 1?
+                                    return( task.level === 1 && !task.completed?
                                         <div key={task.id}>
                                             <Card className="task-card" >
                                                 <CardContent>
@@ -233,9 +241,13 @@ function Projects(props){
                                 })}
                                 
                             </div>
-                            <div className="col-md-2 task-column">
+                            <div className="col task-column">
+                                <Typography>
+                                    Level 2
+                                </Typography>
+                                <Divider></Divider>
                                 {tasks.tasks.map((task) => {
-                                    return( task.level === 2?
+                                    return( task.level === 2 && !task.completed?
                                         <div key={task.id}>
                                             <Card className="task-card" >
                                                 <CardContent>
@@ -281,9 +293,13 @@ function Projects(props){
                                 })}
                                 
                             </div>
-                            <div className="col-md-2 task-column">
+                            <div className="col task-column">
+                                <Typography>
+                                    Level 3
+                                </Typography>
+                                <Divider></Divider>
                                 {tasks.tasks.map((task) => {
-                                    return( task.level === 3?
+                                    return( task.level === 3 && !task.completed?
                                         <div key={task.id}>
                                             <Card className="task-card" >
                                                 <CardContent>
@@ -329,9 +345,13 @@ function Projects(props){
                                 })}
                                 
                             </div>
-                            <div className="col-md-2 task-column">
+                            <div className="col task-column">
+                                <Typography>
+                                    Level 4
+                                </Typography>
+                                <Divider></Divider>
                                 {tasks.tasks.map((task) => {
-                                    return( task.level === 4?
+                                    return( task.level === 4 && !task.completed?
                                         <div key={task.id}>
                                             <Card className="task-card" >
                                                 <CardContent>
@@ -377,9 +397,13 @@ function Projects(props){
                                 })}
                                 
                             </div>
-                            <div className="col-md-2 task-column">
+                            <div className="col task-column">
+                                <Typography>
+                                    Level 5
+                                </Typography>
+                                <Divider></Divider>
                                 {tasks.tasks.map((task) => {
-                                    return( task.level === 5?
+                                    return( task.level === 5 && !task.completed?
                                         <div key={task.id}>
                                             <Card className="task-card" >
                                                 <CardContent>
@@ -424,9 +448,13 @@ function Projects(props){
                                     )
                                 })}
                             </div>
-                            <div className="col-md-2 task-column">
+                            <div id="end-task-column" className="col task-column">
+                                <Typography>
+                                    Completed
+                                </Typography>
+                                <Divider></Divider>
                                 {tasks.tasks.map((task) => {
-                                    return( task.isCompleted?
+                                    return( task.completed?
                                         <div key={task.id}>
                                             <Card className="task-card" >
                                                 <CardContent>
