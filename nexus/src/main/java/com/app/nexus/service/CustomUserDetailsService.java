@@ -1,12 +1,9 @@
 package com.app.nexus.service;
 
-import com.app.nexus.exception.ResourceNotFoundException;
 import com.app.nexus.information.UserPrincipal;
 import com.app.nexus.model.ApplicationUser;
-import com.app.nexus.model.Project;
 import com.app.nexus.repository.ApplicationUserRepository;
 import com.app.nexus.repository.ProjectRepository;
-import com.app.nexus.security.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,10 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @Author Amadeus
