@@ -23,6 +23,16 @@ public class TaskRequest {
     @NotNull(message = "please enter in a level")
     private int level;
 
+    private Boolean is_completed;
+
+    public Boolean getIs_completed() {
+        return is_completed;
+    }
+
+    public void setIs_completed(Boolean is_completed) {
+        this.is_completed = is_completed;
+    }
+
     public int getLevel() {
         return level;
     }
