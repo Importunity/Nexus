@@ -74,3 +74,7 @@
 #button-5:hover button {
     color: #2D3142;
 }
+
+.alert{
+    margin-top: 2vh;
+}

@@ -36,6 +36,10 @@
     margin-bottom: 3vh;
 }
 
+#end-task-column{
+    margin-right: 2vw;
+}
+
 .creation-field{
     margin-bottom: 5vh !important;
 }
