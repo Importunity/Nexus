@@ -5,6 +5,7 @@ import {TOKEN} from '../../constants/types';
 import Proptypes from 'prop-types';
 import '../../styles/login.css';
 import Register from './Register';
+import { Alert } from '@material-ui/lab';
 
 
 function TabPanel(props) {
@@ -44,8 +45,7 @@ return {
   
 
 function Login(props){
-
-
+    const[errors, setErrors] = useState(false);
     const[info, setInfo] = useState({usernameOrEmail: '', password: ''});
     
     const handleChange = (event) => {
@@ -66,6 +66,7 @@ function Login(props){
                 props.onLoad();
             }).catch(error => {
                 if(error.status === 401) {
+                    setErrors(true);
                     console.log('Your Username or Password is incorrect. Please try again!') ;                 
                 } else {
                     console.log("oops something went wrong");                                         
@@ -90,6 +91,9 @@ function Login(props){
                         <form id="login-form" onSubmit={handleSubmit}>
                             <TextField required className="login-input" name="usernameOrEmail" id="usernameOrEmail" label="Username Or Email" fullWidth onChange={handleChange}/>
                             <TextField id="password" className="login-input" name="password" label="Password" type="password" autoComplete="current-password"  fullWidth onChange={handleChange} />
+                            {errors? 
+                                <Alert className="alert" variant="standard" color="error" >Your Username or Password is incorrect. Please try again</Alert> : null }
+
                             <div className="outer-login-btn" id="button-5">
                                 <div id="translate">
                                 </div>
