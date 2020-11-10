@@ -8,9 +8,8 @@ import com.app.nexus.model.Task;
 import com.app.nexus.repository.ApplicationUserRepository;
 import com.app.nexus.repository.ProjectRepository;
 import com.app.nexus.repository.TaskRepository;
-import com.app.nexus.request.TaskRequest;
-import com.app.nexus.response.TaskResponse;
-import com.app.nexus.security.CurrentUser;
+import com.app.nexus.payload.request.TaskRequest;
+import com.app.nexus.payload.response.TaskResponse;
 import com.app.nexus.util.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -52,6 +50,7 @@ public class TaskService {
         task.setDescription(taskRequest.getDescription());
         task.setLevel(taskRequest.getLevel());
         task.setUser(applicationUser);
+        task.setCompleted(taskRequest.getIs_completed());
         project.addTask(task);
         return taskRepository.save(task);
     }
@@ -85,6 +84,7 @@ public class TaskService {
         task.setTitle(taskRequest.getTitle());
         task.setDescription(taskRequest.getDescription());
         task.setLevel(taskRequest.getLevel());
+        task.setCompleted(taskRequest.getIs_completed());
         return taskRepository.save(task);
     }
 
