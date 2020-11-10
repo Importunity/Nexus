@@ -1,27 +1,20 @@
 package com.app.nexus.controller;
 
 import com.app.nexus.information.UserPrincipal;
-import com.app.nexus.model.ApplicationUser;
-import com.app.nexus.model.Task;
 import com.app.nexus.repository.ApplicationUserRepository;
 import com.app.nexus.repository.ProjectRepository;
 import com.app.nexus.repository.TaskRepository;
-import com.app.nexus.request.TaskRequest;
-import com.app.nexus.response.APIResponse;
-import com.app.nexus.response.TaskResponse;
+import com.app.nexus.payload.request.TaskRequest;
+import com.app.nexus.payload.response.TaskResponse;
 import com.app.nexus.security.CurrentUser;
 import com.app.nexus.service.TaskService;
-import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 /**
  * @Author Amadeus

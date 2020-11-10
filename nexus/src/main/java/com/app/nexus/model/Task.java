@@ -53,6 +53,13 @@ public class Task extends ApplicationUserDateAudit {
     @JoinColumn(name = "user_id")
     private ApplicationUser user;
 
+    public Boolean getCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(Boolean completed) {
+        isCompleted = completed;
+    }
 
     public ApplicationUser getUser() {
         return user;

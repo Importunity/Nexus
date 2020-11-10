@@ -3,12 +3,9 @@ package com.app.nexus.controller;
 import com.app.nexus.information.UserIdentityAvailability;
 import com.app.nexus.information.UserPrincipal;
 import com.app.nexus.information.UserSummary;
-import com.app.nexus.model.Project;
 import com.app.nexus.repository.ApplicationUserRepository;
 import com.app.nexus.repository.TaskRepository;
-import com.app.nexus.request.ProjectRequest;
-import com.app.nexus.response.ProjectResponse;
-import com.app.nexus.response.TaskResponse;
+import com.app.nexus.payload.response.TaskResponse;
 import com.app.nexus.security.CurrentUser;
 import com.app.nexus.service.CustomUserDetailsService;
 import com.app.nexus.service.ProjectService;
@@ -20,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @Author Amadeus
