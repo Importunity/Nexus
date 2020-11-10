@@ -1,4 +1,4 @@
-package com.app.nexus.request;
+package com.app.nexus.payload.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

@@ -1,6 +1,5 @@
-package com.app.nexus.request;
+package com.app.nexus.payload.request;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

@@ -1,11 +1,8 @@
-package com.app.nexus.response;
+package com.app.nexus.payload.response;
 
-import com.app.nexus.model.Project;
 import com.app.nexus.model.Task;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.List;
 import java.util.Set;
 
 /**

@@ -1,4 +1,4 @@
-package com.app.nexus.response;
+package com.app.nexus.payload.response;
 
 /**
  * @Author Amadeus
