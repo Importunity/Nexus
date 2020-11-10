@@ -1,4 +1,4 @@
-import { Button, FormControl, InputLabel, makeStyles, Select, TextField, Typography } from '@material-ui/core';
+import { Button, FormControl, FormControlLabel, FormLabel, InputLabel, makeStyles, Radio, RadioGroup, Select, TextField, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { updateTask } from '../../api/TaskAPI';
 
@@ -23,9 +23,10 @@ export default function EditTask(props){
     const classes = useStyles();
     const[task, setTask] = useState(props.taskToEdit);
     const handleChange = (event) => {
-        console.log(event.target.name)
+        //console.log(event.target.name)
         setTask({...task, [event.target.name]: event.target.value})
     }
+
     const editTaskSubmit = (event) => {
         event.preventDefault();
         const taskRequest = task;
@@ -35,8 +36,8 @@ export default function EditTask(props){
             }).catch(error => {
                 console.log(error)
             })
+        props.handleChange(props.count + 1);
     }
-
 
     return (
         <div className={classes.paper}>
@@ -46,7 +47,9 @@ export default function EditTask(props){
                 </Typography>
                 <TextField className="creation-field" required label="Task Title" fullWidth name="title" placeholder={`${props.taskToEdit.task.title}`} onChange={handleChange}></TextField>
                 <TextField className="creation-field" label="Task Description" multiline rows={5} variant="filled" fullWidth name="description" placeholder={`${props.taskToEdit.task.description}`} onChange={handleChange} ></TextField>
-                <FormControl variant="outlined" className={classes.formControl}>
+                <div className="row">
+                    <div className="col-md-4">
+                    <FormControl variant="outlined" className={classes.formControl}>
                     <InputLabel htmlFor="level">Priority Level</InputLabel>
                     <Select
                     id="level"
@@ -56,7 +59,6 @@ export default function EditTask(props){
                     className="creation-field"
                     name="level"
                     onChange={handleChange}
-                    value={task.task.level}
                     >
                     <option aria-label="None" value="" />
                     <option value={1}>One</option>
@@ -65,7 +67,21 @@ export default function EditTask(props){
                     <option value={4}>Four</option>
                     <option value={5}>Five</option>
                     </Select>
+
                 </FormControl>
+
+                    </div>
+                    <div className="col-md-4">
+                    <FormControl component="fieldset">
+                    <FormLabel component="legend">Completion</FormLabel>
+                    <RadioGroup aria-label="Completed" name="is_completed" onChange={handleChange}>
+                        <FormControlLabel value="true" control={<Radio />} label="True" />
+                        <FormControlLabel value="false" control={<Radio />} label="False" />
+                    </RadioGroup>
+                </FormControl>
+                
+                    </div>
+                </div>
                 <br></br>
                 <Button type="submit" variant="contained" color="primary">Edit Task</Button>
             </form>

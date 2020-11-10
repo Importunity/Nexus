@@ -1,6 +1,6 @@
 import { Button, makeStyles, TextField } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createProject as createProjectAPI } from '../../api/ProjectAPI';
 import { PROJECT_DESCRIPTION_MAX, PROJECT_NAME_MAX } from '../../constants/types';
 import '../../styles/project.css';
@@ -57,6 +57,7 @@ function CreateProject(props){
                     setSuccess(false);
                 })
         }
+        props.handleChange(props.count + 1);
     }
     return(
         <div className={classes.paper}>
