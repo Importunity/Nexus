@@ -4,8 +4,8 @@ import com.app.nexus.information.UserSummary;
 import com.app.nexus.model.ApplicationUser;
 import com.app.nexus.model.Project;
 import com.app.nexus.model.Task;
-import com.app.nexus.response.ProjectResponse;
-import com.app.nexus.response.TaskResponse;
+import com.app.nexus.payload.response.ProjectResponse;
+import com.app.nexus.payload.response.TaskResponse;
 
 /**
  * @Author Amadeus

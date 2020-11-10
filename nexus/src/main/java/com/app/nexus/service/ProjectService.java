@@ -5,20 +5,15 @@ import com.app.nexus.information.UserPrincipal;
 import com.app.nexus.model.*;
 import com.app.nexus.repository.ApplicationUserRepository;
 import com.app.nexus.repository.ProjectRepository;
-import com.app.nexus.request.ProjectRequest;
-import com.app.nexus.request.TaskRequest;
-import com.app.nexus.response.ProjectResponse;
-import com.app.nexus.util.ModelMapper;
+import com.app.nexus.repository.TaskRepository;
+import com.app.nexus.payload.request.ProjectRequest;
+import com.app.nexus.payload.response.ProjectResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +28,9 @@ public class ProjectService {
 
     @Autowired
     ApplicationUserRepository applicationUserRepository;
+
+    @Autowired
+    TaskRepository taskRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
 
@@ -67,6 +65,10 @@ public class ProjectService {
     public Project removeProject(UserPrincipal currentUser, Long projectId){
         ApplicationUser applicationUser = applicationUserRepository.findById(currentUser.getId()).orElseThrow(() -> new ResourceNotFoundException("Application User", "id", currentUser.getId()));
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project" , "id", projectId));
+        for(Task task : project.getTasks()){
+            project.removeTask(task);
+            task.getUser().removeTask(task);
+        }
         applicationUser.removeProject(project);
         return projectRepository.save(project);
     }
