@@ -15,10 +15,7 @@ import javax.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 // ignores the created by and updatedby propteries
-@JsonIgnoreProperties(
-        value={"createdBy", "updatedBy"},
-        allowGetters = true
-)
+@JsonIgnoreProperties(value={"createdBy", "updatedBy"}, allowGetters = true)
 public abstract class ApplicationUserDateAudit extends DateAudit{
     @CreatedBy
     @Column(updatable = false)
